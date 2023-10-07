@@ -1,13 +1,12 @@
+import jwt from 'jsonwebtoken'
 import { BunRequest } from 'bunrest/src/server/request'
 import { BunResponse } from 'bunrest/src/server/response'
-import { NextFunction } from 'express'
-import jwt from 'jsonwebtoken'
 
-type Request = BunRequest & {
+export type Request = BunRequest & {
 	user?: jwt.JwtPayload
 }
 
-export default function authenticate(req: Request, res: BunResponse, next: NextFunction) {
+export default function authenticate(req: Request, res: BunResponse, next: ((err?: Error) => {}) | undefined) {
 	const token = req.headers!['token']
 
 	if (!token) {
@@ -15,9 +14,9 @@ export default function authenticate(req: Request, res: BunResponse, next: NextF
 	}
 
 	try {
-		const decoded = jwt.verify(token, process.env.JwtSecret || '') as jwt.JwtPayload
+		const decoded = jwt.verify(token, process.env.JWT_SECRET!) as jwt.JwtPayload
 		req.user = decoded
-		next()
+		next!()
 	} catch (err) {
 		res.status(401).json({ msg: 'UNAUTHORIZED' })
 	}
