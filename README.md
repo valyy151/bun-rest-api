@@ -1,6 +1,6 @@
 # Bun TypeScript REST API
 
-This is a simple REST API built with Bun, Bunrest, Prisma, SQLite and TypeScript.
+This is a simple REST API built with Bunrest, Prisma, and TypeScript.
 
 ## Endpoints
 
